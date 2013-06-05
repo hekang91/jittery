@@ -20,4 +20,4 @@
 等休息完，被试上跑步机后，按刚才的键，继续实验
 
 
-test git
+test smartgit
