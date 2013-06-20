@@ -40,7 +40,7 @@ class Scene:
 		if id == 1: #'room':
 			#viz.add('piazza.osgb')
 			self.curr_scene = viz.add('gallery.osgb')
-		if id == 2: #'ruralPit':
+		if id == 2: #'ruralPit': not used so far
 			import shader_scene
 			class RuralPit:
 				def __init__(self):
@@ -82,8 +82,7 @@ def getTrial(scene,dim,jitter):
 def judgeTask(response):
 	while True:
 		#Wait for either 'y' or 'n' key to be pressed
-		d = yield viztask.waitKeyDown( ['65361','65364','65363'] )#left,down,right
-		#d = yield viztask.waitKeyDown(None)
+		d = yield viztask.waitKeyDown( ['65361','65363'] ) # left and right
 		response.append(d.key)
 		return
 
