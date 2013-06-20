@@ -79,12 +79,12 @@ class Executive:
 		try:
 			for whatJitter,whatScene,whatDim in zip(self.trialSequence,self.scene, self.dim):
 				
-				#print whatJitter,whatScene,whatDim
+				#print whatJitter,whatScene,whatDim # for debug
 				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter)
 				
 				yield trial.doTrial(self.response)
 
-			#print 'response = ',self.response
+			#print 'response = ',self.response # for debug
 			print 'all trials finished'
 						
 			self.saveData()			
