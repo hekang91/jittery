@@ -3,6 +3,9 @@ import viz
 import vizact
 import random
 
+
+# actually i don't like to mix the hardware configuration with the experiment setting (apply jittery)
+# any other way of coding?
 def getOptiTrackTracker(dim,jitter):
 	vrpn7 = viz.add('vrpn7.dle')
 	TRACKER_ID = "Tracker"
@@ -43,6 +46,7 @@ def getOptiTrackTracker(dim,jitter):
 	return trackerLinkable
 
 
+# the monitor and helmet display settings
 def setupGfx():
 	viz.setDisplayMode(2560, 1024, 32, 60)
 	viz.setOption('viz.fullscreen', 1)

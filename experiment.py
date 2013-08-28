@@ -30,6 +30,7 @@ class Executive:
 		self.dim	 		= None	
 		self.scene			= None
 		self.response		= []
+		
 	def generateTrials(self):
 		a = tuple(itertools.repeat(params.all_amp, params.nTrialPerCond)) # repeat conditionIDs nTrialPerCond times
 		b = map(None,*a)                                            	# combine over second dimension (think transpose in matlab)
