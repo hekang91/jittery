@@ -23,3 +23,12 @@
 
 大屏幕-world reference
 头盔-head reference
+
+
+
+TODO:
+sphere条件人和球距离9m，room条件人和房间最远端应距离?米
+声音提示开始
+还剩多少trials
+随时休息
+数据保存
