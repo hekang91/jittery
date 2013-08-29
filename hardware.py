@@ -3,10 +3,10 @@ import viz
 import vizact
 import random
 
-
 # actually i don't like to mix the hardware configuration with the experiment setting (apply jittery)
 # any other way of coding?
-def getOptiTrackTracker(dim,jitter):
+
+def getOptiTrackTracker(dim,jitter,speedZ,startTime):
 	vrpn7 = viz.add('vrpn7.dle')
 	TRACKER_ID = "Tracker"
 	VRPN_MACHINE = "localhost"
@@ -36,9 +36,11 @@ def getOptiTrackTracker(dim,jitter):
 	
 	
 	def applyJitter():
+		global prePosZ
 		whiteNoise = random.gauss(-0.5,0.5)
 		newPos = trackerLinkableInt.getPosition()
 		newPos[dim] = newPos[dim] + jitter*whiteNoise
+		newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
 		trackerLinkable.setPosition(newPos)	
 	
 	vizact.onupdate(viz.PRIORITY_PLUGINS+2,applyJitter)	

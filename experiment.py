@@ -81,7 +81,7 @@ class Executive:
 			for whatJitter,whatScene,whatDim in zip(self.trialSequence,self.scene, self.dim):
 				
 				#print whatJitter,whatScene,whatDim # for debug
-				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter)
+				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter,params.walkSpeedZ)
 				
 				yield trial.doTrial(self.response)
 

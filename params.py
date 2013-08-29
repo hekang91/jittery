@@ -19,5 +19,8 @@ class Params:
 	nSecPerTrial = 3 # second, default = 3
 	
 	# sphere settings
-	sphereHeight = 2 # the sphere does not lay on the floor; it stands on the top of a rod
+	sphereHeight = 2 # the sphere does not lay on the floor; it floats at a constant position
 	distance = 9 # the distance between the observer and sphere
+	
+	# walking speed
+	walkSpeedZ = 0.7

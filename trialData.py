@@ -40,6 +40,7 @@ class Scene:
 		if id == 1: #'room':
 			#viz.add('piazza.osgb')
 			self.curr_scene = viz.add('gallery.osgb')
+		'''
 		if id == 2: #'ruralPit': not used so far
 			import shader_scene
 			class RuralPit:
@@ -59,6 +60,7 @@ class Scene:
 					sky.apply(viz.addUniformFloat('ambient',1))
 				
 			self.curr_scene = RuralPit()
+		'''
 			
 	def setupFixation(self):
 		self.fixation = viz.addText3D('+',pos=[0,2,params.distance]) 
@@ -88,16 +90,19 @@ def judgeTask(response):
 
 
 class ActiveTrial:
-	def __init__(self,scene,dim,jitter):
+	def __init__(self,scene,dim,jitter,speedZ):
 		self.sampleList = []
 		self.scene = scene
 		self.dim = dim
 		self.jitter = jitter
+		self.speedZ = speedZ
+		self.startTime = 0
 		
 	def doTrial(self,response):
 		isDoneWithTrial = False
 		while not isDoneWithTrial:
-			headTrack = hardware.getOptiTrackTracker(self.dim,self.jitter)
+			self.startTime = viz.tick()
+			headTrack = hardware.getOptiTrackTracker(self.dim,self.jitter,self.speedZ,self.startTime)
 			headLink = viz.link(headTrack, viz.MainView)
 			vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 			
