@@ -16,6 +16,7 @@ class Params:
 	# we have 2*2*7 conditions so far: dim(2)*background(2)*jittery(7)
 	# each condition will have nTrialPerCond/4 trials
 	
+	nTrials = len(all_amp)*nTrialPerCond
 	nSecPerTrial = 3 # second, default = 3
 	
 	# sphere settings

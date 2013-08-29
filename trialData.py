@@ -8,6 +8,7 @@ import hardware
 
 
 params = params.Params()
+lastTrials = params.nTrials # global variable is not a good way
 
 def iterable2str(seq, sep): 
     it = iter(seq)
@@ -74,7 +75,26 @@ class Scene:
 		self.fixation.visible(False)
 
 
-	
+class Instruction:
+	def __init__(self):
+		self.textTrials = None
+		self.textChoice = None
+	def initChoice(self):
+		self.textChoice = viz.addText('Jittery or not?',viz.SCREEN)
+		self.textChoice.alignment(viz.ALIGN_CENTER_CENTER)
+		self.textChoice.setPosition([0.5,0.5,0])
+	def updateTrials(self):
+		self.textTrials = viz.addText('last '+ str(lastTrials) +' trials',viz.SCREEN) 
+		self.textTrials.alignment(viz.ALIGN_RIGHT_BOTTOM)
+		self.textTrials.setPosition([0.95,0.05,0])
+		global lastTrials
+		lastTrials = lastTrials - 1
+		self.textTrials.visible(True)
+	def closeTrials(self):
+		self.textTrials.visible(False)
+	def closeChoice(self):
+		self.textChoice.visible(False)
+
 
 def getTrial(scene,dim,jitter):
 	t = ActiveTrial(scene,dim,jitter)
@@ -100,6 +120,7 @@ class ActiveTrial:
 		
 	def doTrial(self,response):
 		isDoneWithTrial = False
+		thisIns = Instruction()
 		while not isDoneWithTrial:
 			self.startTime = viz.tick()
 			headTrack = hardware.getOptiTrackTracker(self.dim,self.jitter,self.speedZ,self.startTime)
@@ -115,10 +136,16 @@ class ActiveTrial:
 			
 			yield viztask.waitTime(params.nSecPerTrial)
 			scene.closeScene()
-			scene.closeFixation()
+			scene.closeFixation()			
+			
+			thisIns.initChoice()
+			thisIns.updateTrials()
 			
 			yield judgeTask(response)
-			#yield viztask.waitKeyDown(' ')			
+			#yield viztask.waitKeyDown(' ')	
+			
+			thisIns.closeChoice()
+			thisIns.closeTrials()
 			
 			isDoneWithTrial = True
 			
