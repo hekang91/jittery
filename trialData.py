@@ -35,12 +35,13 @@ class Scene:
 		if id == 0: #'sphere':
 			import vizshape
 			self.curr_scene = vizshape.addSphere()
-			self.curr_scene.setScale([0.2,0.2,0.2])
-			self.curr_scene.setPosition([0,params.sphereHeight,params.distance])
+			self.curr_scene.setScale([params.sphereScale,params.sphereScale,params.sphereScale])
+			self.curr_scene.setPosition([0,params.sphereHeight,params.sphereDistance])
 			self.curr_scene.color(viz.BLUE)
 		if id == 1: #'room':
 			#viz.add('piazza.osgb')
 			self.curr_scene = viz.add('gallery.osgb')
+			self.curr_scene.setPosition([0,0,params.roomPosOffset])
 		'''
 		if id == 2: #'ruralPit': not used so far
 			import shader_scene
@@ -64,7 +65,7 @@ class Scene:
 		'''
 			
 	def setupFixation(self):
-		self.fixation = viz.addText3D('+',pos=[0,2,params.distance]) 
+		self.fixation = viz.addText3D('+',pos=[0,2,params.sphereDistance]) 
 		self.fixation.alignment(viz.ALIGN_CENTER_BOTTOM) 
 		self.fixation.setScale([0.7,0.7,0.7]) 
 		

@@ -19,9 +19,17 @@ class Params:
 	nTrials = len(all_amp)*nTrialPerCond
 	nSecPerTrial = 3 # second, default = 3
 	
-	# sphere settings
+	
+	# distance settings
+	treadmillPosZ = 0.6 # need to measure every time
+	
+	sphereScale = 0.3
 	sphereHeight = 2 # the sphere does not lay on the floor; it floats at a constant position
-	distance = 9 # the distance between the observer and sphere
+	sphereDistance = 10 + treadmillPosZ # the distance between the observer and sphere
+	
+	ROOM_DISTANCE = 9.87 # from the center of the room to the end
+	roomPosOffset = sphereDistance - ROOM_DISTANCE
+	
 	
 	# walking speed
 	walkSpeedZ = 0.7
