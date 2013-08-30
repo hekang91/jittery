@@ -32,8 +32,14 @@
 
 ----------------------------------------------
 【数据保存】
+baseline: 
+subjectName+baseline+status(s/w).txt
+n*11矩阵
+各列表示：time,position(3),EulerOri(3),QuatOri(4)
+可以直接用matlab读取
 
-被试姓名.txt
+main: 
+subjectName.txt
 4*280矩阵
 每行分别代表scene,dim,jitter,response
 处理时需要先转换成mat文件，matlab的load无法读取
