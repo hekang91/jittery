@@ -17,11 +17,11 @@
 
 实验前向被试展示/demo下的三个demo：分别为不抖，左右抖，上下抖
 
-测静止站立和行走时的头动（/baseline下的stand和walk），两个condition各三分钟
+测静止站立和行走时的头动（/baseline下的baseline.py），两个condition各三分钟
 行走的步速为2.5 km/h ~ 0.7m/s
 
 正式实验：
-运行任何一个py都可以调用main.py
+运行任何一个.py都可以调用main.py
 实验中被试需要注视场景中央的注视点
 每个场景持续3s，场景消失后，被试立刻进行判断：抖动/不抖
 被试口述判断，由主试按键：leftArrow/rightArrow
@@ -41,7 +41,7 @@
 ----------------------
 【todo】
 
-两种实验条件：大屏幕-world reference；头盔-head reference
+两种实验条件选哪个？大屏幕-world reference；头盔-head reference
 
 code:
 随时休息
