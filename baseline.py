@@ -6,8 +6,8 @@ import random
 import os
 
 global nSecPerTrial
-nSecPerTrial = 30 # for debug
-#nSecPerTrial = 180 # for debug
+nSecPerTrial = 10 # for debug
+#nSecPerTrial = 60
 
 
 

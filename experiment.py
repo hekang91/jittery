@@ -31,17 +31,17 @@ class Executive:
 		self.response		= []
 		
 	def generateTrials(self):
-		a = tuple(itertools.repeat(params.all_amp, params.nTrialPerCond)) # repeat conditionIDs nTrialPerCond times
+		a = tuple(itertools.repeat(params.all_amp, params.nTrialPerJitter)) # repeat conditionIDs nTrialPerJitter times
 		b = map(None,*a)                                            	# combine over second dimension (think transpose in matlab)
 		self.trialSequence = flattenList(b) 							# flatten into unidimensional array
 	
-		dim     = [0]*(params.nTrialPerCond/2)
-		dim[:0] = [1]*(params.nTrialPerCond/2)
+		dim     = [0]*(params.nTrialPerJitter/2)
+		dim[:0] = [1]*(params.nTrialPerJitter/2)
 		dim     = [x[:] for x in itertools.repeat(dim, len(params.all_amp))] # repeat toggle for each condition, doing deep copy
 		self.dim= flattenList(dim)
 		
-		scene     = [0]*(params.nTrialPerCond/4)
-		scene[:0] = [1]*(params.nTrialPerCond/4)
+		scene     = [0]*(params.nTrialPerJitter/4)
+		scene[:0] = [1]*(params.nTrialPerJitter/4)
 		scene     = [x[:] for x in itertools.repeat(scene, len(params.all_amp)*2)]
 		self.scene= flattenList(scene)
 		
