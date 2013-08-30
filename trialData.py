@@ -3,12 +3,11 @@ import viztask
 import vizact
 import vizshape
 
-import params
+#import params
 import hardware
+from params import params
 
-
-params = params.Params()
-lastTrials = params.nTrials # global variable is not a good way
+lastTrials = params.nTrials
 
 def iterable2str(seq, sep): 
     it = iter(seq)
@@ -178,4 +177,10 @@ class ActiveTrial:
 			print s
 			self.sampleList.append(s)
 			yield viztask.waitTime(1/60)
+	
 
+
+# if executing this, call main
+if __name__ == "__main__":
+    import main
+    main.main()

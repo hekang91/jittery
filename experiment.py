@@ -5,12 +5,11 @@ import viztask
 import itertools
 import random
 
-import params
+#import params
 import hardware
 import trialData
 
-params = params.Params()
-
+from params import params
 
 def flattenList(input):
 	if isinstance(input[0],tuple) or isinstance(input[0],list):
@@ -64,9 +63,9 @@ class Executive:
 	def runExperiment(self):
 		yield self.doTrials()
 		
-	def saveData(self):
-		result = open('result.txt', 'a') 
-		result.write('scene,dim,jitter,response\n\n')
+	def saveData(self,subjectName):
+		result = open(str(subjectName)+ '.txt', 'a') 
+		#result.write('scene,dim,jitter,response\n\n')
 		result.write(str(self.scene) + '\n')
 		result.write(str(self.dim) + '\n')
 		result.write(str(self.trialSequence) + '\n')
@@ -88,7 +87,7 @@ class Executive:
 			#print 'response = ',self.response # for debug
 			print 'all trials finished'
 						
-			self.saveData()			
+			self.saveData(params.subjectName)			
 			
 			viz.quit()
 		except:
@@ -96,3 +95,9 @@ class Executive:
 			viz.logError('** Caught exception in expt.doTrials')
 			viz.quit()
 			raise
+			
+
+# if executing this, call main
+if __name__ == "__main__":
+    import main
+    main.main()

@@ -57,4 +57,9 @@ def setupGfx():
 	import nvis
 	nvis.nvisorSX60()
 	viz.go()
-	
+
+
+# if executing this, call main
+if __name__ == "__main__":
+    import main
+    main.main()	
