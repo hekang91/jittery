@@ -84,6 +84,12 @@ class Instruction:
 		self.textChoice = viz.addText('Jittery or not?',viz.SCREEN)
 		self.textChoice.alignment(viz.ALIGN_CENTER_CENTER)
 		self.textChoice.setPosition([0.5,0.5,0])
+	def playStartSound(self):
+		startSound = viz.addAudio('notify.wav')
+		startSound.play()
+	def playEndSound(self):
+		endSound = viz.addAudio('chimes.wav')
+		endSound.play()
 	def updateTrials(self):
 		self.textTrials = viz.addText('last '+ str(lastTrials) +' trials',viz.SCREEN) 
 		self.textTrials.alignment(viz.ALIGN_RIGHT_BOTTOM)
@@ -131,7 +137,7 @@ class ActiveTrial:
 			scene = Scene()
 			scene.setupScene(self.scene)
 			scene.setupFixation()
-			
+			thisIns.playStartSound()
 			if self.scene == 0:
 				scene.closeFixation()
 			
@@ -139,6 +145,7 @@ class ActiveTrial:
 			scene.closeScene()
 			scene.closeFixation()			
 			
+			thisIns.playEndSound()
 			thisIns.initChoice()
 			thisIns.updateTrials()
 			
