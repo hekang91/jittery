@@ -132,7 +132,8 @@ class ActiveTrial:
 			yield viztask.waitTime(1/60)
 			
 	def saveData(self,subjectName,status):
-		result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a') 
+		#result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a') 
+		result = open(str(subjectName)+'_baseline_RB_drive_HMD_stand.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write( str(s) + '\n')
 			

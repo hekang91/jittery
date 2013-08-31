@@ -132,7 +132,8 @@ class ActiveTrial:
 			yield viztask.waitTime(1/60)
 			
 	def saveData(self,subjectName,status):
-		result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a') 
+		#result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a') 
+		result = open(str(subjectName)+'_baseline_RB_drive_Screen_stand.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write( str(s) + '\n')
 			
@@ -169,12 +170,16 @@ class Executive:
 
 
 def main():
-	viz.setDisplayMode(2560, 1024, 32, 60)
+	# should be commented when using RB drive Screen
+	#viz.setDisplayMode(2560, 1024, 32, 60)
+	
 	viz.setOption('viz.fullscreen', 1)
 	#viz.setOption('viz.dwm_composition', 0)	# disable DWM composition to help with reliable timing
 	#viz.setOption('viz.prevent_screensaver', 1)
-	import nvis
-	nvis.nvisorSX60()
+	
+	# should also be commented when using RB drive Screen
+	#import nvis
+	#nvis.nvisorSX60()
 
 	global subjectName,status
 	subjectName = str(viz.input('Enter subject name'))

@@ -129,12 +129,12 @@ class ActiveTrial:
 			#s.subjectOriQuat    = viz.MainView.getQuat()
 			#print s
 			self.sampleList.append(s)
-			self.saveData(subjectName,status)
+			self.saveData(subjectName,status,displayMode)
 			yield viztask.waitTime(1/60)
 			
-	def saveData(self,subjectName,status):
-		#result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a')
-		result = open(str(subjectName)+'_baseline_RB_with_Screen_stand.txt', 'a') 
+	def saveData(self,subjectName,status,displayMode):
+		#result = open(str(subjectName)+'_baseline_'+str(status)+'.txt', 'a') 
+		result = open(str(subjectName)+'_baseline_mode'+str(displayMode)+'_'+str(status)+'.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write( str(s) + '\n')
 			
@@ -171,32 +171,39 @@ class Executive:
 
 
 def main():
-	# commented when using RB with screen
-	#viz.setDisplayMode(2560, 1024, 32, 60)
-	
-	viz.setOption('viz.fullscreen', 1)
-	#viz.setOption('viz.dwm_composition', 0)	# disable DWM composition to help with reliable timing
-	#viz.setOption('viz.prevent_screensaver', 1)
-	
-	# commented when using RB with screen
-	#import nvis
-	#nvis.nvisorSX60()
 
-	global subjectName,status
+	global subjectName,status,displayMode
 	subjectName = str(viz.input('Enter subject name'))
 	if subjectName == '': raise RuntimeError('Need subject name')	
 	status = str(viz.input('stand or walk? (input s/w)'))
-	if status != 's' and status != 'w': raise RuntimeError('input s/w')
+	if status != 's' and status != 'w': raise RuntimeError('input s/w!')
+	displayMode = str(viz.input('Enter display mode -- [1] RB dirve HMD [2] RB drive screen [3] RB with Screen: 1/2/3'))
+
 	
+	if displayMode == '1':
+		viz.setDisplayMode(2560, 1024, 32, 60)
+		import nvis
+		nvis.nvisorSX60()
+		headTrack = getOptiTrackTracker()
+		headLink = viz.link(headTrack, viz.MainView)
+		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
+	elif displayMode == '2':
+		headTrack = getOptiTrackTracker()
+		headLink = viz.link(headTrack, viz.MainView)
+		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)		
+	elif displayMode == '3':
+		pass
+	else raise RuntimeError('Wrong display mode')
+		
+	
+	viz.setOption('viz.fullscreen', 1)	
+	#viz.setOption('viz.dwm_composition', 0)	# disable DWM composition to help with reliable timing
+	#viz.setOption('viz.prevent_screensaver', 1)
 	viz.add('piazza.osgb')
 	viz.go()	
-	
 	random.seed()
-	headTrack = getOptiTrackTracker()
 	
-	# especially commented when using RB with screen
-	#headLink = viz.link(headTrack, viz.MainView)
-	#vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
+
 
 	expt = Executive()
 	try:
