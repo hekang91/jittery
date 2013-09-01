@@ -47,6 +47,10 @@ subjectName.txt
 处理时需要先转换成mat文件，matlab的load无法读取
 
 ----------------------
+【OptiTrack】
+kalman filter: Translation 0.1, Rotation 0.5
+
+--------------------------------------------
 【todo】
 
 两种实验条件选哪个？大屏幕-world reference；头盔-head reference
