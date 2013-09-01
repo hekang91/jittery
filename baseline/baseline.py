@@ -7,14 +7,14 @@ import os
 
 class Params:
 	nSecPerTrial = 30 # for debug
-	#nSecPerTrial = 60
+	nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
 	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
 	trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
-	trackerSpaceRot             = [5,0,0] # for rural pit: startOri = [5,0,0]
+	trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
 	
-	walkSpeed = 1
+	walkSpeed = 1.5
 	
 
 global params
@@ -243,6 +243,8 @@ def main():
 	viz.go()	
 	random.seed()
 	curr_scene = RuralPit()
+	viz.MainView.collision( viz.ON )
+	
 	global startTime
 	startTime = viz.tick()
 
