@@ -5,11 +5,15 @@ import vizcam
 import random
 import os
 
-global nSecPerTrial
-nSecPerTrial = 30 # for debug
-#nSecPerTrial = 60
+class Params:
+	nSecPerTrial = 30 # for debug
+	#nSecPerTrial = 60
 
-
+	viewOffset                  = [0.05, -0.2, 0.085]
+	trackerSpaceOffset          = [-0.36,0.11,-0.42] 
+	
+global params
+params = Params()
 
 class ParamsJitter:
 	dim = 0 #0:x, 1:y, 2:z
@@ -111,23 +115,24 @@ class ActiveTrial:
 		class Sample:
 			def __init__(self):
 				self.time = 0
-				self.subjectPos = [0,0,0]
-				self.subjectOriEuler = [0,0,0]
-				self.subjectOriQuat = [0,0,0,0]
+				self.trackerPos = [0,0,0]
+				self.VRPos = [0,0,0]
+				self.trackerOriEuler = [0,0,0]
+				self.trackerOriQuat = [0,0,0,0]
 			def __str__(self):
-				temp = [self.time] + self.subjectPos + self.subjectOriEuler + self.subjectOriQuat
+				temp = [self.time] + self.trackerPos + self.VRPos + self.trackerOriEuler + self.trackerOriQuat
 				return iterable2str(temp,'\t')
 		while True:
 			global s
 			s = Sample()
 			s.time          = viz.tick()
-			s.subjectPos    = headTrack.getPosition()
-			#s.subjectPos    = viz.MainView.getPosition()
-			s.subjectOriEuler    = headTrack.getEuler()
-			s.subjectOriQuat    = headTrack.getQuat()
+			s.trackerPos    = headTrack.getPosition()
+			s.VRPos    = viz.MainView.getPosition()
+			s.trackerOriEuler    = headTrack.getEuler()
+			s.trackerOriQuat    = headTrack.getQuat()
 			#s.subjectOriEuler   = viz.MainView.getEuler()
 			#s.subjectOriQuat    = viz.MainView.getQuat()
-			#print s
+			print s
 			self.sampleList.append(s)
 			self.saveData(subjectName,status,displayMode)
 			yield viztask.waitTime(1/60)
@@ -142,7 +147,7 @@ class ActiveTrial:
 		isDoneWithTrial = False
 		while not isDoneWithTrial:
 			collectDataTask = viztask.schedule(self.collectData())
-			yield viztask.waitTime(nSecPerTrial)
+			yield viztask.waitTime(params.nSecPerTrial)
 			isDoneWithTrial = True
 			collectDataTask.kill()
 
@@ -158,7 +163,7 @@ class Executive:
 	def doTrials(self):
 		try:
 			my_trial = ActiveTrial()
-			yield my_trial.doTrial(nSecPerTrial)
+			yield my_trial.doTrial(params.nSecPerTrial)
 			#my_trial.writeToFile(subjectName,status)
 			viz.quit()
 		except:
@@ -168,7 +173,22 @@ class Executive:
 			raise
 
 
-
+def setTrackerOffset():
+	global headTrack, headLink
+	
+	headTrack = getOptiTrackTracker()
+	headLink = viz.link(headTrack, viz.MainView)
+	
+	# position (as this offset is local in head space)
+	if not all(v == 0 for v in params.viewOffset):
+		# we've got a non-zero link offset:
+		headLink.preTrans(params.viewOffset)
+	
+	# setup an offset to position the VR world relative to the tracker space
+	# any tracker space rotation is added below to the mirrorRotationOperator
+	if not all(v == 0 for v in params.trackerSpaceOffset):
+		# we've got a non-zero link offset:
+		headLink.postTrans(params.trackerSpaceOffset)
 
 def main():
 
@@ -184,13 +204,13 @@ def main():
 		viz.setDisplayMode(2560, 1024, 32, 60)
 		import nvis
 		nvis.nvisorSX60()
-		headTrack = getOptiTrackTracker()
-		headLink = viz.link(headTrack, viz.MainView)
+
+		setTrackerOffset()
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 	elif displayMode == '2':
 		viz.window.setFullscreenMonitor(1)
-		headTrack = getOptiTrackTracker()
-		headLink = viz.link(headTrack, viz.MainView)
+
+		setTrackerOffset()
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)		
 	elif displayMode == '3':
 		viz.window.setFullscreenMonitor(1)

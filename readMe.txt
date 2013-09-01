@@ -36,8 +36,8 @@
 【数据保存】
 baseline: 
 subjectName+baseline+status(s/w).txt
-n*11矩阵
-各列表示：time,position(3),EulerOri(3),QuatOri(4)
+n*14矩阵
+各列表示：time,tracker_position(3),VR_position(3),EulerOri(3),QuatOri(4)
 可以直接用matlab读取
 
 main: 
@@ -49,6 +49,8 @@ subjectName.txt
 ----------------------
 【OptiTrack】
 kalman filter: Translation 0.1, Rotation 0.5
+viewOffset                  = [0.05, -0.2, 0.085] # RB到视中心的offset
+trackerSpaceOffset          = [-0.36,0.11,-0.42]  # 跑步机中心定为[0,0,0],与OptiTrack坐标系的offset
 
 --------------------------------------------
 【todo】
