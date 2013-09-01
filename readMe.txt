@@ -50,7 +50,7 @@ subjectName.txt
 【OptiTrack】
 kalman filter: Translation 0.1, Rotation 0.5
 viewOffset                  = [0.05, -0.2, 0.085] # RB到视中心的offset
-trackerSpaceOffset          = [-0.36,0.11,-0.42]  # 跑步机中心定为[0,0,0],与OptiTrack坐标系的offset
+trackerSpaceOffset          = [-0.36,0.11,-0.42]  # 跑步机中心定为[0,0,0],与OptiTrack坐标系的offset;经验值，勿改；跑步机位置改变或重新标定后重测
 
 --------------------------------------------
 【todo】
