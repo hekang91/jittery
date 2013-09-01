@@ -90,10 +90,10 @@ class Instruction:
 		endSound = viz.addAudio('chimes.wav')
 		endSound.play()
 	def updateTrials(self):
+		global lastTrials
 		self.textTrials = viz.addText('last '+ str(lastTrials) +' trials',viz.SCREEN) 
 		self.textTrials.alignment(viz.ALIGN_RIGHT_BOTTOM)
 		self.textTrials.setPosition([0.95,0.05,0])
-		global lastTrials
 		lastTrials = lastTrials - 1
 		self.textTrials.visible(True)
 	def closeTrials(self):
@@ -130,7 +130,29 @@ class ActiveTrial:
 		while not isDoneWithTrial:
 			self.startTime = viz.tick()
 			headTrack = hardware.getOptiTrackTracker(self.dim,self.jitter,self.speedZ,self.startTime)
+			global headLink
 			headLink = viz.link(headTrack, viz.MainView)
+
+
+			def setTrackerOffset():
+				# position (as this offset is local in head space)
+				if not all(v == 0 for v in params.viewOffset):
+					# we've got a non-zero link offset:
+					headLink.preTrans(params.viewOffset)
+	
+				# setup an offset to position the VR world relative to the tracker space
+				# any tracker space rotation is added below to the mirrorRotationOperator
+				if not all(v == 0 for v in params.trackerSpaceOffset):
+					# we've got a non-zero link offset:
+					headLink.postTrans(params.trackerSpaceOffset)
+	
+				if not all(v == 0 for v in params.trackerSpaceRot):
+					# we've got a non-zero link offset:
+					headLink.postEuler(params.trackerSpaceRot)
+
+			setTrackerOffset()
+			
+
 			vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 			
 			scene = Scene()
@@ -160,20 +182,21 @@ class ActiveTrial:
 		class Sample:
 			def __init__(self):
 				self.time = 0
-				self.subjectPos = [0,0,0]
-				#self.subjectOri = [0,0,0]
-				self.subjectOri = [0,0,0,0]
+				self.trackerPos = [0,0,0]
+				self.VRPos = [0,0,0]
+				self.trackerOri = [0,0,0]
+				self.VROri = [0,0,0]
 			def __str__(self):
-				temp = [self.time] + self.subjectPos + self.subjectOri
+				temp = [self.time] + self.trackerPos + self.VRPos + self.trackerOri + self.VROri
 				return iterable2str(temp,'\t')
 		while True:
 			s = Sample()
 			s.time          = viz.tick()
-			#s.subjectPos    = headTrack.getPosition()
-			s.subjectPos    = viz.MainView.getPosition()
-			#s.subjectOri    = headTrack.getEuler()
+			s.trackerPos    = headTrack.getPosition()
+			s.VRPos    = viz.MainView.getPosition()
+			s.trackerOri    = headTrack.getEuler()
 			#s.subjectOri    = viz.MainView.getEuler()
-			s.subjectOri    = viz.MainView.getQuat()
+			s.VROri    = viz.MainView.getEuler()
 			print s
 			self.sampleList.append(s)
 			yield viztask.waitTime(1/60)

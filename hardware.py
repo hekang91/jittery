@@ -2,6 +2,8 @@
 import viz
 import vizact
 import random
+from params import params
+
 
 # actually i don't like to mix the hardware configuration with the experiment setting (apply jittery)
 # any other way of coding?
@@ -47,6 +49,14 @@ def getOptiTrackTracker(dim,jitter,speedZ,startTime):
 	
 	return trackerLinkable
 
+
+
+def setTrackerOffset():
+	global headLink
+		
+
+		
+		
 
 # the monitor and helmet display settings
 def setupGfx():

@@ -20,6 +20,13 @@ class Params:
 	nSecPerTrial = 3 # second, default = 3
 	
 	
+	# offsets
+	viewOffset                  = [0.05, -0.2, 0.085]
+	trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
+	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
+	trackerSpaceRot             = [0,0,0] # for rural pit: startOri = [5,0,0]
+	
+	
 	# distance settings
 	treadmillPosZ = 0.6 # need to measure every time
 	
