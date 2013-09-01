@@ -6,7 +6,7 @@ import random
 import os
 
 global nSecPerTrial
-nSecPerTrial = 10 # for debug
+nSecPerTrial = 30 # for debug
 #nSecPerTrial = 60
 
 
@@ -179,7 +179,7 @@ def main():
 	if status != 's' and status != 'w': raise RuntimeError('input s/w!')
 	displayMode = str(viz.input('Enter display mode -- [1] RB dirve HMD [2] RB drive screen [3] RB with Screen: 1/2/3'))
 
-	
+	global headTrack	
 	if displayMode == '1':
 		viz.setDisplayMode(2560, 1024, 32, 60)
 		import nvis
@@ -188,12 +188,15 @@ def main():
 		headLink = viz.link(headTrack, viz.MainView)
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 	elif displayMode == '2':
+		viz.window.setFullscreenMonitor(1)
 		headTrack = getOptiTrackTracker()
 		headLink = viz.link(headTrack, viz.MainView)
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)		
 	elif displayMode == '3':
-		pass
-	else raise RuntimeError('Wrong display mode')
+		viz.window.setFullscreenMonitor(1)
+		headTrack = getOptiTrackTracker()
+	else:
+		raise RuntimeError('Wrong display mode')
 		
 	
 	viz.setOption('viz.fullscreen', 1)	
