@@ -10,8 +10,13 @@ class Params:
 	#nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
-	trackerSpaceOffset          = [-0.36,0.11,-0.42] 
+	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
+	trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
+	trackerSpaceRot             = [5,0,0] # for rural pit: startOri = [5,0,0]
 	
+	walkSpeed = 1
+	
+
 global params
 params = Params()
 
@@ -51,10 +56,12 @@ def getOptiTrackTracker():
 	vizact.onupdate(viz.PRIORITY_PLUGINS+1,transformQuat)		
 	
 	def applyJitter():
+		global prePosZ
 		pj = ParamsJitter()
 		whiteNoise = random.gauss(0,1)
 		newPos = trackerLinkableInt.getPosition()
 		newPos[pj.dim] = newPos[pj.dim] + pj.amp*whiteNoise
+		newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
 		trackerLinkable.setPosition(newPos)	
 	
 	vizact.onupdate(viz.PRIORITY_PLUGINS+2,applyJitter)	
@@ -84,32 +91,6 @@ class ActiveTrial:
 		global sampleList
 		self.sampleList 	            = []
 	
-	'''
-	def writeToFile(self,subjectName,status):
-		# create data directory if needed
-		dataDir = './'
-		if not os.path.isdir(dataDir):
-			os.makedirs(dataDir)    # this does recursive directory creation so we're always good
-		
-		# create filename and open file for writing
-		dataFileName = subjectName + str(status) + '.txt'
-		dataFile = open(dataDir + dataFileName, "w")
-		
-		# write data
-		# header
-		dataFile.write(str(self))
-		dataFile.write('\n')
-
-        # data
-        for sample in self.sampleList:
-            dataFile.write(str(sample))
-            dataFile.write('\n')
-
-        # done
-        dataFile.flush()
-        dataFile.close()
-    '''
-
 
 	def collectData(self):
 		class Sample:
@@ -118,9 +99,10 @@ class ActiveTrial:
 				self.trackerPos = [0,0,0]
 				self.VRPos = [0,0,0]
 				self.trackerOriEuler = [0,0,0]
-				self.trackerOriQuat = [0,0,0,0]
+				self.VROriEuler = [0,0,0]
+				#self.trackerOriQuat = [0,0,0,0]
 			def __str__(self):
-				temp = [self.time] + self.trackerPos + self.VRPos + self.trackerOriEuler + self.trackerOriQuat
+				temp = [self.time] + self.trackerPos + self.VRPos + self.trackerOriEuler + self.VROriEuler#+ self.trackerOriQuat
 				return iterable2str(temp,'\t')
 		while True:
 			global s
@@ -129,9 +111,9 @@ class ActiveTrial:
 			s.trackerPos    = headTrack.getPosition()
 			s.VRPos    = viz.MainView.getPosition()
 			s.trackerOriEuler    = headTrack.getEuler()
-			s.trackerOriQuat    = headTrack.getQuat()
-			#s.subjectOriEuler   = viz.MainView.getEuler()
-			#s.subjectOriQuat    = viz.MainView.getQuat()
+			#s.trackerOriQuat    = headTrack.getQuat()
+			s.VROriEuler   = viz.MainView.getEuler()
+			#s.VROriQuat    = viz.MainView.getQuat()
 			print s
 			self.sampleList.append(s)
 			self.saveData(subjectName,status,displayMode)
@@ -189,14 +171,48 @@ def setTrackerOffset():
 	if not all(v == 0 for v in params.trackerSpaceOffset):
 		# we've got a non-zero link offset:
 		headLink.postTrans(params.trackerSpaceOffset)
+	
+	if not all(v == 0 for v in params.trackerSpaceRot):
+		# we've got a non-zero link offset:
+		headLink.postEuler(params.trackerSpaceRot)
+
+
+import shader_scene
+class RuralPit:
+	def __init__(self):
+		#Setup lighting
+		self.light = viz.add(viz.LIGHT)
+		self.light.position(0,1,0,0)
+		self.light.disable()
+		
+		self.env = viz.add(viz.GROUP)
+		#Add room
+		self.room = self.env.add('RuralPit/ruralPit.ive')
+		shader_scene.process(self.room)
+
+		sky = self.env.add('RuralPit/ruralPit_sky.ive')
+		sky.appearance(viz.DECAL)
+		sky.apply(viz.addUniformFloat('ambient',1))
+
+
 
 def main():
 
 	global subjectName,status,displayMode
 	subjectName = str(viz.input('Enter subject name'))
 	if subjectName == '': raise RuntimeError('Need subject name')	
+	
+	
 	status = str(viz.input('stand or walk? (input s/w)'))
 	if status != 's' and status != 'w': raise RuntimeError('input s/w!')
+	
+	global speedZ
+	if status == 's':
+		speedZ = 0
+	elif status == 'w':
+		speedZ = params.walkSpeed
+	
+	
 	displayMode = str(viz.input('Enter display mode -- [1] RB dirve HMD [2] RB drive screen [3] RB with Screen: 1/2/3'))
 
 	global headTrack	
@@ -222,10 +238,13 @@ def main():
 	viz.setOption('viz.fullscreen', 1)	
 	#viz.setOption('viz.dwm_composition', 0)	# disable DWM composition to help with reliable timing
 	#viz.setOption('viz.prevent_screensaver', 1)
-	viz.add('piazza.osgb')
+	
+	
 	viz.go()	
 	random.seed()
-	
+	curr_scene = RuralPit()
+	global startTime
+	startTime = viz.tick()
 
 
 	expt = Executive()

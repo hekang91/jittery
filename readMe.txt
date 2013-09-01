@@ -16,8 +16,11 @@
 -----------------------
 【实验步骤】
 
-测静止站立和行走时的头动（/baseline下的baseline.py），两个condition各三分钟
-行走的步速为2.5 km/h ~ 0.7m/s
+测静止站立和行走时的头动（/baseline下的baseline.py）
+分三种情况：[1] RB drive HMD [2] RB drive Screen [3] RB with Screen
+时间1分钟
+
+跑步机的步速为2.5 km/h ~ 0.7m/s（1m/s感觉仍慢）
 
 向被试展示/demo下的三个demo：分别为不抖，左右抖，上下抖
 
@@ -35,9 +38,9 @@
 ----------------------------------------------
 【数据保存】
 baseline: 
-subjectName+baseline+status(s/w).txt
-n*14矩阵
-各列表示：time,tracker_position(3),VR_position(3),EulerOri(3),QuatOri(4)
+subjectName+baseline+mode(1/2/3)+status(s/w).txt
+n*13矩阵
+各列表示：time,tracker_position(3),VR_position(3),tracker_EulerOri(3),VR_EulerOri(3)
 可以直接用matlab读取
 
 main: 
