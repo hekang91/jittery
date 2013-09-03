@@ -10,9 +10,13 @@ class Params:
 	nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
+	
 	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
-	trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
-	trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
+	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
+	trackerSpaceOffset          = [2,0.11,-170] # for city
+	
+	#trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
+	trackerSpaceRot             = [0,0,0] # for city
 	
 	walkSpeed = 1.5
 	
@@ -176,7 +180,7 @@ def setTrackerOffset():
 		# we've got a non-zero link offset:
 		headLink.postEuler(params.trackerSpaceRot)
 
-
+'''
 import shader_scene
 class RuralPit:
 	def __init__(self):
@@ -193,6 +197,32 @@ class RuralPit:
 		sky = self.env.add('RuralPit/ruralPit_sky.ive')
 		sky.appearance(viz.DECAL)
 		sky.apply(viz.addUniformFloat('ambient',1))
+'''		
+
+class City():
+	def __init__(self):
+		#Initialize city
+		city = viz.add('euro_test19_opt_lite.ive')
+		city.disable(viz.COLLISION)
+		city.disable(viz.LIGHTING)
+		city.appearance(viz.DECAL)
+		city.disable(viz.DEPTH_WRITE, 'lanes')
+		city.disable(viz.DEPTH_TEST, 'lanes')
+
+		city.draworder(-3, 'ground')
+		city.draworder(-2, 'sidewalks')
+		city.draworder(-1, 'lanes')
+
+		#city.disable(viz.RENDERING, 'BenchGroup')
+		city.disable(viz.RENDERING, 'LODBenchGroup')
+		city.disable(viz.RENDERING, 'PlantGroup')
+		city.disable(viz.RENDERING, 'LODPlantGroup')
+		city.disable(viz.RENDERING, 'SigLights')
+		city.disable(viz.RENDERING, 'LODSigLight')
+		#city.disable(viz.RENDERING, 'Signs')
+
+		sky = viz.add('skydome.dlc')
+		sky.texture(viz.add(viz.ENVIRONMENT_MAP,'sky.jpg'))	
 
 
 
@@ -242,7 +272,8 @@ def main():
 	
 	viz.go()	
 	random.seed()
-	curr_scene = RuralPit()
+	#curr_scene = RuralPit()
+	city = City()
 	viz.MainView.collision( viz.ON )
 	
 	global startTime
