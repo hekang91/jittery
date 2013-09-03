@@ -52,11 +52,19 @@ def getOptiTrackTracker():
 		#	trackerLinkableInt.getEuler()[2] * 1
 		#	]
 		#trackerLinkable.setEuler(newEuler)
-		if displayMode != '3':
+		if displayMode == '1':
 			newQuat = [
 				trackerLinkableInt.getQuat()[0] * -1, 
 				trackerLinkableInt.getQuat()[1] * -1, 
 				trackerLinkableInt.getQuat()[2] * -1,
+				trackerLinkableInt.getQuat()[3] * 1
+				]
+		elif displayMode == '2':
+			newQuat = [
+				trackerLinkableInt.getQuat()[0] * -1, 
+				trackerLinkableInt.getQuat()[1] * -1, 
+				trackerLinkableInt.getQuat()[2] * -1,
+				#0 * -1,
 				trackerLinkableInt.getQuat()[3] * 1
 				]
 		elif displayMode == '3':
