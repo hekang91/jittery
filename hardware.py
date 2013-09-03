@@ -9,6 +9,7 @@ from params import params
 # any other way of coding?
 
 def getOptiTrackTracker(dim,jitter,speedZ,startTime):
+	global trackerLinkableInt
 	vrpn7 = viz.add('vrpn7.dle')
 	TRACKER_ID = "Tracker"
 	VRPN_MACHINE = "localhost"

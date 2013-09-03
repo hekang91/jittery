@@ -32,6 +32,7 @@ class ParamsJitter:
 
 
 def getOptiTrackTracker():
+	global trackerLinkableInt
 	vrpn7 = viz.add('vrpn7.dle')
 	TRACKER_ID = "Tracker"
 	VRPN_MACHINE = "localhost"
@@ -112,8 +113,10 @@ class ActiveTrial:
 			global s
 			s = Sample()
 			s.time          = viz.tick()
-			s.trackerPos    = headTrack.getPosition()
+			#s.trackerPos    = headTrack.getPosition()
+			s.trackerPos    = trackerLinkableInt.getPosition()
 			s.VRPos    = viz.MainView.getPosition()
+			
 			s.trackerOriEuler    = headTrack.getEuler()
 			#s.trackerOriQuat    = headTrack.getQuat()
 			s.VROriEuler   = viz.MainView.getEuler()

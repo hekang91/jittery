@@ -192,10 +192,10 @@ class ActiveTrial:
 		while True:
 			s = Sample()
 			s.time          = viz.tick()
-			s.trackerPos    = headTrack.getPosition()
+			#s.trackerPos    = headTrack.getPosition()
+			s.trackerPos    = trackerLinkableInt.getPosition()
 			s.VRPos    = viz.MainView.getPosition()
 			s.trackerOri    = headTrack.getEuler()
-			#s.subjectOri    = viz.MainView.getEuler()
 			s.VROri    = viz.MainView.getEuler()
 			print s
 			self.sampleList.append(s)
