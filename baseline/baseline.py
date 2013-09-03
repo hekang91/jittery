@@ -6,19 +6,22 @@ import random
 import os
 
 class Params:
-	nSecPerTrial = 30 # for debug
-	nSecPerTrial = 60
+	nSecPerTrial = 90 # for debug
+	#nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
 	
 	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
 	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
 	trackerSpaceOffset          = [2,0.11,-170] # for city
+	startZ = -170 #trackerSpaceOffset will change during moving; we need a constant varialbe indicating the start position for applying movement
 	
 	#trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
 	trackerSpaceRot             = [0,0,0] # for city
 	
 	walkSpeed = 1.5
+	
+	eyeHeight = 1.7
 	
 
 global params
@@ -49,24 +52,34 @@ def getOptiTrackTracker():
 		#	trackerLinkableInt.getEuler()[2] * 1
 		#	]
 		#trackerLinkable.setEuler(newEuler)
-		newQuat = [
-			trackerLinkableInt.getQuat()[0] * -1, 
-			trackerLinkableInt.getQuat()[1] * -1, 
-			trackerLinkableInt.getQuat()[2] * -1,
-			trackerLinkableInt.getQuat()[3] * 1
-			]
+		if displayMode != '3':
+			newQuat = [
+				trackerLinkableInt.getQuat()[0] * -1, 
+				trackerLinkableInt.getQuat()[1] * -1, 
+				trackerLinkableInt.getQuat()[2] * -1,
+				trackerLinkableInt.getQuat()[3] * 1
+				]
+		elif displayMode == '3':
+			newQuat = [0,0,0,1]
+			
 		#trackerLinkable.setEuler(newEuler)
 		trackerLinkable.setQuat(newQuat)
 	
 	vizact.onupdate(viz.PRIORITY_PLUGINS+1,transformQuat)		
 	
 	def applyJitter():
-		global prePosZ
 		pj = ParamsJitter()
-		whiteNoise = random.gauss(0,1)
-		newPos = trackerLinkableInt.getPosition()
-		newPos[pj.dim] = newPos[pj.dim] + pj.amp*whiteNoise
-		newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
+		#whiteNoise = random.gauss(0,1)
+		if displayMode != '3':
+			newPos = trackerLinkableInt.getPosition()
+			#newPos[pj.dim] = newPos[pj.dim] + pj.amp*whiteNoise
+			newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
+		elif displayMode == '3':
+			newPos = params.trackerSpaceOffset
+			#print params.trackerSpaceOffset
+			newPos[1] = params.eyeHeight
+			newPos[2] = params.startZ + speedZ*(viz.tick()-startTime)
+		
 		trackerLinkable.setPosition(newPos)	
 	
 	vizact.onupdate(viz.PRIORITY_PLUGINS+2,applyJitter)	
@@ -121,7 +134,7 @@ class ActiveTrial:
 			#s.trackerOriQuat    = headTrack.getQuat()
 			s.VROriEuler   = viz.MainView.getEuler()
 			#s.VROriQuat    = viz.MainView.getQuat()
-			print s
+			#print s
 			self.sampleList.append(s)
 			self.saveData(subjectName,status,displayMode)
 			yield viztask.waitTime(1/60)
@@ -137,8 +150,8 @@ class ActiveTrial:
 		while not isDoneWithTrial:
 			collectDataTask = viztask.schedule(self.collectData())
 			yield viztask.waitTime(params.nSecPerTrial)
-			isDoneWithTrial = True
 			collectDataTask.kill()
+			isDoneWithTrial = True
 
 
 
@@ -168,20 +181,21 @@ def setTrackerOffset():
 	headTrack = getOptiTrackTracker()
 	headLink = viz.link(headTrack, viz.MainView)
 	
-	# position (as this offset is local in head space)
-	if not all(v == 0 for v in params.viewOffset):
-		# we've got a non-zero link offset:
-		headLink.preTrans(params.viewOffset)
+	if displayMode != '3':
+		# position (as this offset is local in head space)
+		if not all(v == 0 for v in params.viewOffset):
+			# we've got a non-zero link offset:
+			headLink.preTrans(params.viewOffset)
 	
-	# setup an offset to position the VR world relative to the tracker space
-	# any tracker space rotation is added below to the mirrorRotationOperator
-	if not all(v == 0 for v in params.trackerSpaceOffset):
-		# we've got a non-zero link offset:
-		headLink.postTrans(params.trackerSpaceOffset)
+		# setup an offset to position the VR world relative to the tracker space
+		# any tracker space rotation is added below to the mirrorRotationOperator
+		if not all(v == 0 for v in params.trackerSpaceOffset):
+			# we've got a non-zero link offset:
+			headLink.postTrans(params.trackerSpaceOffset)
 	
-	if not all(v == 0 for v in params.trackerSpaceRot):
-		# we've got a non-zero link offset:
-		headLink.postEuler(params.trackerSpaceRot)
+		if not all(v == 0 for v in params.trackerSpaceRot):
+			# we've got a non-zero link offset:
+			headLink.postEuler(params.trackerSpaceRot)
 
 '''
 import shader_scene
@@ -256,14 +270,11 @@ def main():
 
 		setTrackerOffset()
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
-	elif displayMode == '2':
+	elif displayMode == '2' or displayMode == '3':
 		viz.window.setFullscreenMonitor(1)
 
 		setTrackerOffset()
 		vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)		
-	elif displayMode == '3':
-		viz.window.setFullscreenMonitor(1)
-		headTrack = getOptiTrackTracker()
 	else:
 		raise RuntimeError('Wrong display mode')
 		
