@@ -22,6 +22,8 @@ def main():
 	params.subjectName = str(viz.input('Enter subject name'))
 	if params.subjectName == '': raise RuntimeError('Need subject name')
 
+	params.displayMode = str(viz.input('Enter display mode -- [1] RB dirve HMD [2] RB drive screen [3] RB with Screen: 1/2/3'))
+
 	hardware.setupGfx()
 	random.seed()
 	expt = experiment.Executive()

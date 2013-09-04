@@ -6,7 +6,7 @@ import random
 import os
 
 class Params:
-	nSecPerTrial = 90 # for debug
+	nSecPerTrial = 5 # for debug
 	#nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
@@ -14,7 +14,7 @@ class Params:
 	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
 	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
 	trackerSpaceOffset          = [2,0.11,-170] # for city
-	startZ = -170 #trackerSpaceOffset will change during moving; we need a constant varialbe indicating the start position for applying movement
+	startZ = -170 #trackerSpaceOffset will change during moving; we need a constant variable indicating the start position for applying movement
 	
 	#trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
 	trackerSpaceRot             = [0,0,0] # for city
@@ -77,10 +77,10 @@ def getOptiTrackTracker():
 	
 	def applyJitter():
 		pj = ParamsJitter()
-		#whiteNoise = random.gauss(0,1)
+		whiteNoise = random.gauss(0,1)
 		if displayMode != '3':
 			newPos = trackerLinkableInt.getPosition()
-			#newPos[pj.dim] = newPos[pj.dim] + pj.amp*whiteNoise
+			newPos[pj.dim] = newPos[pj.dim] + pj.amp*whiteNoise
 			newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
 		elif displayMode == '3':
 			newPos = params.trackerSpaceOffset

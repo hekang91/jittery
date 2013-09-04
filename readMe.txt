@@ -43,13 +43,13 @@
 ----------------------------------------------
 【数据保存】
 baseline: 
-subjectName+baseline+mode(1/2/3)+status(s/w).txt
+subjectName+baseline+displayMode(1/2/3)+status(s/w).txt
 n*13矩阵
 各列表示：time,tracker_position(3),VR_position(3),tracker_EulerOri(3),VR_EulerOri(3)
 可以直接用matlab读取
 
 main: 
-subjectName.txt
+subjectName_displayMode.txt
 4*280矩阵
 每行分别代表scene,dim,jitter,response
 处理时需要先转换成mat文件，matlab的load无法读取

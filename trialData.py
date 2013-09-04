@@ -133,7 +133,6 @@ class ActiveTrial:
 			global headLink
 			headLink = viz.link(headTrack, viz.MainView)
 
-
 			def setTrackerOffset():
 				# position (as this offset is local in head space)
 				if not all(v == 0 for v in params.viewOffset):

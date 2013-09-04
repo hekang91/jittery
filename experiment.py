@@ -64,7 +64,7 @@ class Executive:
 		yield self.doTrials()
 		
 	def saveData(self,subjectName):
-		result = open(str(subjectName)+ '.txt', 'a') 
+		result = open(str(subjectName)+ str(params.displayMode) + '.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write(str(self.scene) + '\n')
 		result.write(str(self.dim) + '\n')
