@@ -6,8 +6,8 @@ import random
 import os
 
 class Params:
-	nSecPerTrial = 5 # for debug
-	#nSecPerTrial = 60
+	#nSecPerTrial = 5 # for debug
+	nSecPerTrial = 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
 	
