@@ -70,9 +70,11 @@ class Scene:
 		
 	def closeScene(self):
 		self.curr_scene.visible(False)
+		self.curr_scene.remove()
 		
 	def closeFixation(self):
 		self.fixation.visible(False)
+		self.fixation.remove()
 
 
 class Instruction:
@@ -84,11 +86,11 @@ class Instruction:
 		self.textChoice.alignment(viz.ALIGN_CENTER_CENTER)
 		self.textChoice.setPosition([0.5,0.5,0])
 	def playStartSound(self):
-		startSound = viz.addAudio('notify.wav')
-		startSound.play()
+		#startSound = viz.addAudio('notify.wav')
+		params.startSound.play()
 	def playEndSound(self):
-		endSound = viz.addAudio('chimes.wav')
-		endSound.play()
+		#endSound = viz.addAudio('chimes.wav')
+		params.endSound.play()
 	def updateTrials(self):
 		global lastTrials
 		self.textTrials = viz.addText('last '+ str(lastTrials) +' trials',viz.SCREEN) 
@@ -98,9 +100,10 @@ class Instruction:
 		self.textTrials.visible(True)
 	def closeTrials(self):
 		self.textTrials.visible(False)
+		self.textTrials.remove()
 	def closeChoice(self):
 		self.textChoice.visible(False)
-
+		self.textChoice.remove()
 
 def getTrial(scene,dim,jitter):
 	t = ActiveTrial(scene,dim,jitter)

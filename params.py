@@ -1,4 +1,5 @@
 # params.py
+import viz
 
 class Params:
 	
@@ -6,11 +7,11 @@ class Params:
 	all_dim = [0,1] # 0:x, 1:y, 2:z
 	# face Z postive: 0: left or right, 1: up or down, 2: back or forth
 	
-	all_amp = [0.01,0.1] # for debug
+	#all_amp = [0.01,0.1] # for debug
 	#all_amp = [0.004,0.008,0.012,0.016,0.020,0.024,0.028,0.032] # walk, 8 level, do not use
-	#all_amp = [0.002,0.007,0.012,0.017,0.022,0.027,0.032]		 # walk, 7 level, use it in the exp
+	all_amp = [0.002,0.007,0.012,0.017,0.022,0.027,0.032]		 # walk, 7 level, use it in the exp
 	
-	nTrialPerCond = 1 # default = 10
+	nTrialPerCond = 10 # default = 10
 	nTrialPerJitter = 4*nTrialPerCond # for each jittery condition, do how many trials
 	# x-room,y-room,x-sphere,y-sphere; 
 	# thus we will totally have nTrialPerCond*length(all_amp) trials
@@ -18,6 +19,10 @@ class Params:
 	
 	nTrials = len(all_amp)*nTrialPerJitter
 	nSecPerTrial = 3 # second, default = 3
+	
+	#sound
+	startSound = viz.addAudio('notify.wav')
+	endSound = viz.addAudio('chimes.wav')
 	
 	
 	# offsets
