@@ -4,6 +4,7 @@ import viztask
 import vizcam
 import random
 import os
+#import shader_scene
 
 class Params:
 	#nSecPerTrial = 5 # for debug
@@ -249,7 +250,33 @@ class City():
 		sky = viz.add('skydome.dlc')
 		sky.texture(viz.add(viz.ENVIRONMENT_MAP,'sky.jpg'))	
 
+class Grass:
+	def __init__(self):
+		#Setup lighting
+		#self.light = viz.add(viz.LIGHT)
+		#self.light.position(0,1,0,0)
+		#self.light.disable()
+		#self.env = viz.add(viz.GROUP)
 
+		#self.sky = self.env.add('RuralPit/ruralPit_sky.ive')
+		#self.sky.appearance(viz.DECAL)
+		#self.sky.apply(viz.addUniformFloat('ambient',1))
+					
+		for eachrow in range(20):
+			for eachcol in range(20):
+				self.ground = viz.addChild('ground_grass.osgb')
+		#self.ground.setScale([1,1,1])
+				self.ground.setPosition([eachrow*50-500,0,eachcol*50-500])
+		def visible(self,Boolean):
+			#self.sky.visible(Boolean)
+			#for eachrow in range(20):
+				#for eachcol in range(20):
+			self.ground.visible(Boolean)
+		def remove(self):
+			#self.sky.remove()
+			#for eachrow in range(20):
+				#for eachcol in range(20):
+			self.ground.remove()
 
 def main():
 
@@ -295,7 +322,8 @@ def main():
 	viz.go()	
 	random.seed()
 	#curr_scene = RuralPit()
-	city = City()
+	scene = City()
+	#scene = Grass()
 	viz.MainView.collision( viz.ON )
 	
 	global startTime
