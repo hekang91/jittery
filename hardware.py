@@ -90,6 +90,9 @@ def setupGfx():
 	viz.setOption('viz.fullscreen', 1)	
 	viz.setOption('viz.dwm_composition', 0)	# disable DWM composition to help with reliable timing
 	viz.setOption('viz.prevent_screensaver', 1)
+	viz.setMultiSample(False)
+
+	viz.MainScene.enable(viz.POINT_SMOOTH,viz.NICE)
 	viz.go()
 
 # if executing this, call main

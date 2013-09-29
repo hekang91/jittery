@@ -40,8 +40,9 @@ class Executive:
 		dim     = [x[:] for x in itertools.repeat(dim, len(params.all_amp))] # repeat toggle for each condition, doing deep copy
 		self.dim= flattenList(dim)
 		
-		scene     = [0]*(params.nTrialPerJitter/4)
-		scene[:0] = [1]*(params.nTrialPerJitter/4)
+		#scene     = [0]*(params.nTrialPerJitter/4)
+		#scene[:0] = [1]*(params.nTrialPerJitter/4)
+		scene     = [0]*(params.nTrialPerJitter/2)
 		scene     = [x[:] for x in itertools.repeat(scene, len(params.all_amp)*2)]
 		self.scene= flattenList(scene)
 		
@@ -64,7 +65,7 @@ class Executive:
 		yield self.doTrials()
 		
 	def saveData(self,subjectName):
-		result = open(str(subjectName)+ str(params.displayMode) + '.txt', 'a') 
+		result = open(str(subjectName)+'_mode'+ str(params.displayMode) + '.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write(str(self.scene) + '\n')
 		result.write(str(self.dim) + '\n')

@@ -31,18 +31,60 @@ class Scene:
 		self.fixation = None
 		
 	def setupScene(self,id):
+		if id == 99:  #'grass ground':
+			import shader_scene
+			class RuralPit:
+				def __init__(self):
+					#Setup lighting
+					#self.light = viz.add(viz.LIGHT)
+					#self.light.position(0,1,0,0)
+					#self.light.disable()
+					#self.env = viz.add(viz.GROUP)
+
+					#self.sky = self.env.add('RuralPit/ruralPit_sky.ive')
+					#self.sky.appearance(viz.DECAL)
+					#self.sky.apply(viz.addUniformFloat('ambient',1))
+					
+					#for eachrow in range(20):
+						#for eachcol in range(20):
+					#self.ground = viz.addChild('ground_grass.osgb')
+					#self.ground.setScale([1,1,1])
+							#self.ground.setPosition([eachrow*50-500,0,eachcol*50-500])
+					self.ground = viz.addChild('sky_day.osgb')
+					#viz.clearcolor(viz.SKYBLUE)
+					#env = viz.addEnvironmentMap('sky.jpg') 
+					#sky = viz.addCustomNode('skydome.dlc') 
+					#sky.texture(env)
+				def visible(self,Boolean):
+					#self.sky.visible(Boolean)
+					#for eachrow in range(20):
+						#for eachcol in range(20):
+					self.ground.visible(Boolean)
+				def remove(self):
+					#self.sky.remove()
+					#for eachrow in range(20):
+						#for eachcol in range(20):
+					self.ground.remove()
+					viz.clearcolor(viz.BLACK)
+							
+			self.curr_scene = RuralPit()
+		
+		if id == 1:
+			self.curr_scene = viz.addChild('ground.osgb')
+
+
 		if id == 0: #'sphere':
 			import vizshape
 			self.curr_scene = vizshape.addSphere()
 			self.curr_scene.setScale([params.sphereScale,params.sphereScale,params.sphereScale])
 			self.curr_scene.setPosition([0,params.sphereHeight,params.sphereDistance])
 			self.curr_scene.color(viz.BLUE)
-		if id == 1: #'room':
+		if id == 101: #'room':
 			#viz.add('piazza.osgb')
 			self.curr_scene = viz.add('gallery.osgb')
 			self.curr_scene.setPosition([0,0,params.roomPosOffset])
 		'''
-		if id == 2: #'ruralPit': not used so far
+		if id == 102: #'ruralPit': not used so far
 			import shader_scene
 			class RuralPit:
 				def __init__(self):
@@ -64,9 +106,12 @@ class Scene:
 		'''
 			
 	def setupFixation(self):
-		self.fixation = viz.addText3D('+',pos=[0,2,params.sphereDistance]) 
-		self.fixation.alignment(viz.ALIGN_CENTER_BOTTOM) 
-		self.fixation.setScale([0.7,0.7,0.7]) 
+		#self.fixation = viz.addText3D('+',pos=[0,2,params.sphereDistance])
+		self.fixation = viz.addText('+',viz.SCREEN) 
+		self.fixation.setPosition([0.5,0.5,0])
+		#self.fixation.alignment(viz.ALIGN_CENTER_BOTTOM)
+		self.fixation.alignment(viz.ALIGN_CENTER_CENTER)
+		self.fixation.setScale([0.5,0.5,0.5])
 		
 	def closeScene(self):
 		self.curr_scene.visible(False)
@@ -161,8 +206,8 @@ class ActiveTrial:
 			scene.setupScene(self.scene)
 			scene.setupFixation()
 			thisIns.playStartSound()
-			if self.scene == 0:
-				scene.closeFixation()
+			#if self.scene == 0:
+				#scene.closeFixation()
 			
 			yield viztask.waitTime(params.nSecPerTrial)
 			scene.closeScene()
