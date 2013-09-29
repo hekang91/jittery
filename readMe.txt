@@ -69,3 +69,6 @@ code:
 随时休息
 数据目前存在jittery目录，最好存在/data/下
 数据最好存成mat格式
+
+
+Hello, Yusheng!
