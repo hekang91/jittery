@@ -67,10 +67,27 @@ class Executive:
 	def saveResponseData(self,subjectName):
 		result = open(str(subjectName)+'_mode'+ str(params.displayMode) + '.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
-		result.write(str(self.scene) + '\n')
-		result.write(str(self.dim) + '\n')
-		result.write(str(self.trialSequence) + '\n')
-		result.write(str(self.response) + '\n')
+		#result.write(str(self.scene) + '\n')
+		#result.write(str(self.dim) + '\n')
+		#result.write(str(self.trialSequence) + '\n')
+		#result.write(str(self.response) + '\n')
+		
+		for each in self.scene:
+			result.write(str(each) + ' ')
+		result.write('\n')
+		
+		for each in self.dim:
+			result.write(str(each) + ' ')
+		result.write('\n')
+		
+		for each in self.trialSequence:
+			result.write(str(each) + ' ')
+		result.write('\n')
+		
+		for each in self.response:
+			result.write(str(each) + ' ')
+		result.write('\n')
+		
 		
 	def doTrials(self):
 		print '==========='

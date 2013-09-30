@@ -158,9 +158,14 @@ def getTrial(scene,dim,jitter):
 
 def judgeTask(response):
 	while True:
+		thisResp = -1 
 		#Wait for either 'y' or 'n' key to be pressed
 		d = yield viztask.waitKeyDown( ['65361','65363'] ) # left and right
-		response.append(d.key)
+		if d.key = '65361':
+			thisResp = 1 # left, jitter, yes
+		else:
+			thisResp = 0 # right, no jitter, no
+		response.append(thisResp)
 		return
 
 
