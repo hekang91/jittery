@@ -2,6 +2,7 @@ import viz
 import viztask
 import vizact
 import vizshape
+import os
 
 #import params
 import hardware
@@ -204,6 +205,9 @@ class ActiveTrial:
 			
 			scene = Scene()
 			scene.setupScene(self.scene)
+			
+			collectDataTask = viztask.schedule(self.collectData())
+			
 			scene.setupFixation()
 			thisIns.playStartSound()
 			#if self.scene == 0:
@@ -211,6 +215,7 @@ class ActiveTrial:
 			
 			yield viztask.waitTime(params.nSecPerTrial)
 			scene.closeScene()
+			collectDataTask.kill()
 			scene.closeFixation()			
 			
 			thisIns.playEndSound()
@@ -224,6 +229,23 @@ class ActiveTrial:
 			thisIns.closeTrials()
 			
 			isDoneWithTrial = True
+	
+	def writeToFile(subjectName):
+		dataDir = './data_head/'
+        if not os.path.isdir(dataDir):
+            os.makedirs(dataDir)    # this does recursive directory creation so we're always good
+        
+		dataFileName = str(subjectName) + '_T_' + str(params.nTrials - lastTrials + 1) + '.txt'
+		dataFile = open(dataDir + '/' + dataFileName, "w")
+		
+		# write data
+        for sample in self.sampleList:
+            dataFile.write(str(sample))
+            dataFile.write('\n')
+            
+        # done
+        dataFile.flush()
+        bdataFile.close()
 			
 	def collectData(self):
 		class Sample:
@@ -244,9 +266,20 @@ class ActiveTrial:
 			s.VRPos    = viz.MainView.getPosition()
 			s.trackerOri    = headTrack.getEuler()
 			s.VROri    = viz.MainView.getEuler()
-			print s
+			#print s
 			self.sampleList.append(s)
+			#self.saveHeadData()
 			yield viztask.waitTime(1/60)
+	
+	def remove(self):
+        for item in self.removeList:
+            item.remove()
+	
+	'''		
+	def saveHeadData(self):
+		result = open(str(subjectName)+str(params.nTrials - lastTrials + 1)+'.txt', 'a') 
+		result.write( str(s) + '\n')
+	'''
 	
 
 

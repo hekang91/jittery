@@ -64,7 +64,7 @@ class Executive:
 	def runExperiment(self):
 		yield self.doTrials()
 		
-	def saveData(self,subjectName):
+	def saveResponseData(self,subjectName):
 		result = open(str(subjectName)+'_mode'+ str(params.displayMode) + '.txt', 'a') 
 		#result.write('scene,dim,jitter,response\n\n')
 		result.write(str(self.scene) + '\n')
@@ -75,7 +75,7 @@ class Executive:
 	def doTrials(self):
 		print '==========='
 		print '--expt start--'
-
+		viz.mouse.setVisible(viz.OFF)
 		# any error during the experiments needs to be caught here (as this function is run through the scheduler)
 		try:
 			for whatJitter,whatScene,whatDim in zip(self.trialSequence,self.scene, self.dim):
@@ -84,16 +84,19 @@ class Executive:
 				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter,params.walkSpeedZ)
 				
 				yield trial.doTrial(self.response)
+				trial.writeToFile(params.subjectName)
 
 			#print 'response = ',self.response # for debug
 			print 'all trials finished'
 						
-			self.saveData(params.subjectName)			
+			self.saveResponseData(params.subjectName)	
 			
+			viz.mouse.setVisible(viz.ON)
 			viz.quit()
 		except:
 			# close screen on error
 			viz.logError('** Caught exception in expt.doTrials')
+			viz.mouse.setVisible(viz.ON)
 			viz.quit()
 			raise
 			
