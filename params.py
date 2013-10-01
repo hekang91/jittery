@@ -44,7 +44,7 @@ class Params:
 	
 	ROOM_DISTANCE = 9.87 # from the center of the room to the end
 	roomPosOffset = sphereDistance - ROOM_DISTANCE
-	
+	BlurRadius = 10
 	
 	# walking speed
 	walkSpeedZ = 0.7

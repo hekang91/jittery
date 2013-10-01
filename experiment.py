@@ -88,6 +88,15 @@ class Executive:
 			result.write(str(each) + ' ')
 		result.write('\n')
 		
+	def setGaussionFuzzy(self):
+		import vizfx.postprocess
+		from vizfx.postprocess.blur import GaussianBlurEffect
+		effect = GaussianBlurEffect(blurRadius=params.BlurRadius)
+		vizfx.postprocess.addEffect(effect)
+		return effect
+		
+	def removeGaussionFuzzy(self,effect):
+		effect.remove()
 		
 	def doTrials(self):
 		print '==========='
@@ -95,6 +104,7 @@ class Executive:
 		viz.mouse.setVisible(viz.OFF)
 		# any error during the experiments needs to be caught here (as this function is run through the scheduler)
 		try:
+			effect = self.setGaussionFuzzy()
 			for whatJitter,whatScene,whatDim in zip(self.trialSequence,self.scene, self.dim):
 				
 				#print whatJitter,whatScene,whatDim # for debug
@@ -102,7 +112,8 @@ class Executive:
 				
 				yield trial.doTrial(self.response)
 				trial.writeToFile(params.subjectName)
-
+			
+			removeGaussionFuzzy(effect)
 			#print 'response = ',self.response # for debug
 			print 'all trials finished'
 						

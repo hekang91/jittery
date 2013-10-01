@@ -30,9 +30,53 @@ class Scene:
 		self.id = 'None'
 		self.curr_scene = None
 		self.fixation = None
+		self.curr_scene_scale = None
 		
 	def setupScene(self,id):
-		if id == 99:  #'grass ground':
+		if id == 1: #'blue circle'
+			self.curr_scene_scale = [3, 3, 1]
+			self.curr_scene = viz.addTexQuad()
+			self.curr_scene.color(viz.BLACK)
+			self.curr_scene.setPosition( [0, 3,20] )
+			self.curr_scene.zoffset(1) #avoid zfighing, make curr_scene appear behind pictures
+			self.curr_scene.setScale(curr_scene_scale)
+			self.curr_scene.texture(mask)
+
+		if id == 100: #'sphere':
+			import vizshape
+			self.curr_scene = vizshape.addSphere()
+			self.curr_scene.setScale([params.sphereScale,params.sphereScale,params.sphereScale])
+			self.curr_scene.setPosition([0,params.sphereHeight,params.sphereDistance])
+			self.curr_scene.color(viz.BLUE)
+		if id == 101: #'room':
+			#viz.add('piazza.osgb')
+			self.curr_scene = viz.add('gallery.osgb')
+			self.curr_scene.setPosition([0,0,params.roomPosOffset])
+		'''
+		if id == 102: #'ruralPit': not used so far
+			import shader_scene
+			class RuralPit:
+				def __init__(self):
+					#Setup lighting
+					self.light = viz.add(viz.LIGHT)
+					self.light.position(0,1,0,0)
+					self.light.disable()
+		
+					self.env = viz.add(viz.GROUP)
+					#Add room
+					self.room = self.env.add('RuralPit/ruralPit.ive')
+					shader_scene.process(self.room)
+
+					sky = self.env.add('RuralPit/ruralPit_sky.ive')
+					sky.appearance(viz.DECAL)
+					sky.apply(viz.addUniformFloat('ambient',1))
+				
+			self.curr_scene = RuralPit()
+		'''
+		if id == 103:
+			self.curr_scene = viz.addChild('ground.osgb')
+		'''
+		if id == 104:  #'grass ground':
 			import shader_scene
 			class RuralPit:
 				def __init__(self):
@@ -66,43 +110,7 @@ class Scene:
 					#for eachrow in range(20):
 						#for eachcol in range(20):
 					self.ground.remove()
-					viz.clearcolor(viz.BLACK)
-							
-			self.curr_scene = RuralPit()
-		
-		if id == 1:
-			self.curr_scene = viz.addChild('ground.osgb')
-
-
-		if id == 0: #'sphere':
-			import vizshape
-			self.curr_scene = vizshape.addSphere()
-			self.curr_scene.setScale([params.sphereScale,params.sphereScale,params.sphereScale])
-			self.curr_scene.setPosition([0,params.sphereHeight,params.sphereDistance])
-			self.curr_scene.color(viz.BLUE)
-		if id == 101: #'room':
-			#viz.add('piazza.osgb')
-			self.curr_scene = viz.add('gallery.osgb')
-			self.curr_scene.setPosition([0,0,params.roomPosOffset])
-		'''
-		if id == 102: #'ruralPit': not used so far
-			import shader_scene
-			class RuralPit:
-				def __init__(self):
-					#Setup lighting
-					self.light = viz.add(viz.LIGHT)
-					self.light.position(0,1,0,0)
-					self.light.disable()
-		
-					self.env = viz.add(viz.GROUP)
-					#Add room
-					self.room = self.env.add('RuralPit/ruralPit.ive')
-					shader_scene.process(self.room)
-
-					sky = self.env.add('RuralPit/ruralPit_sky.ive')
-					sky.appearance(viz.DECAL)
-					sky.apply(viz.addUniformFloat('ambient',1))
-				
+					viz.clearcolor(viz.BLACK)							
 			self.curr_scene = RuralPit()
 		'''
 			
@@ -110,7 +118,6 @@ class Scene:
 		#self.fixation = viz.addText3D('+',pos=[0,2,params.sphereDistance])
 		self.fixation = viz.addText('+',viz.SCREEN) 
 		self.fixation.setPosition([0.5,0.5,0])
-		#self.fixation.alignment(viz.ALIGN_CENTER_BOTTOM)
 		self.fixation.alignment(viz.ALIGN_CENTER_CENTER)
 		self.fixation.setScale([0.5,0.5,0.5])
 		
