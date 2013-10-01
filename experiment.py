@@ -4,8 +4,8 @@ import vizact
 import viztask
 import itertools
 import random
+from pyDOE import *
 
-#import params
 import hardware
 import trialData
 
@@ -26,36 +26,25 @@ class Executive:
 	def __init__(self):
 		# these are set in createTrials()
 		self.trialSequence 	= None
-		self.dim	 		= None	
-		self.scene			= None
+		self.jitter			= []
+		self.dim	 		= []	
+		self.scene			= []
 		self.response		= []
 		
 	def generateTrials(self):
-		a = tuple(itertools.repeat(params.all_amp, params.nTrialPerJitter)) # repeat conditionIDs nTrialPerJitter times
-		b = map(None,*a)                                            	# combine over second dimension (think transpose in matlab)
-		self.trialSequence = flattenList(b) 							# flatten into unidimensional array
-	
-		dim     = [0]*(params.nTrialPerJitter/2)
-		dim[:0] = [1]*(params.nTrialPerJitter/2)
-		dim     = [x[:] for x in itertools.repeat(dim, len(params.all_amp))] # repeat toggle for each condition, doing deep copy
-		self.dim= flattenList(dim)
-		
-		#scene     = [0]*(params.nTrialPerJitter/4)
-		#scene[:0] = [1]*(params.nTrialPerJitter/4)
-		scene     = [0]*(params.nTrialPerJitter/2)
-		scene     = [x[:] for x in itertools.repeat(scene, len(params.all_amp)*2)]
-		self.scene= flattenList(scene)
-		
-	
-		order = range(len(self.trialSequence))
+		fullmat = fullfact([len(params.all_amp),len(params.all_scene),len(params.all_dim)])
+		a = tuple(itertools.repeat(fullmat, params.nTrialPerCond))
+		b = map(None,*a)
+		seq = flattenList(b) 
+		order = range(len(seq))
 		random.shuffle(order)
-		self.trialSequence = [self.trialSequence[i] for i in order]
-		self.dim        = [self.dim[i]        for i in order]
-		self.scene        = [self.scene[i]        for i in order]
 		
-		#print 'jitter = ',self.trialSequence
-		#print 'dim = ',self.dim
-		#print 'scene = ',self.scene
+		self.trialSequence = [seq[i] for i in order]
+		
+		for each in self.trialSequence:
+			self.jitter.append(params.all_amp[each[0]]) 
+			self.scene.append(params.all_scene[each[0]])
+			self.dim.append(params.all_dim[each[0]]) 			
 	
 	def startSession(self):
 		self.generateTrials()
@@ -66,11 +55,6 @@ class Executive:
 		
 	def saveResponseData(self,subjectName):
 		result = open(str(subjectName)+'_mode'+ str(params.displayMode) + '.txt', 'a') 
-		#result.write('scene,dim,jitter,response\n\n')
-		#result.write(str(self.scene) + '\n')
-		#result.write(str(self.dim) + '\n')
-		#result.write(str(self.trialSequence) + '\n')
-		#result.write(str(self.response) + '\n')
 		
 		for each in self.scene:
 			result.write(str(each) + ' ')
@@ -105,7 +89,7 @@ class Executive:
 		# any error during the experiments needs to be caught here (as this function is run through the scheduler)
 		try:
 			effect = self.setGaussionFuzzy()
-			for whatJitter,whatScene,whatDim in zip(self.trialSequence,self.scene, self.dim):
+			for whatJitter,whatScene,whatDim in zip(self.jitter,self.scene,self.dim):
 				
 				#print whatJitter,whatScene,whatDim # for debug
 				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter,params.walkSpeedZ)

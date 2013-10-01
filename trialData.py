@@ -4,11 +4,11 @@ import vizact
 import vizshape
 import os
 
-#import params
 import hardware
 from params import params
 
 lastTrials = params.nTrials
+mask = viz.addTexture('blue_circle.jpg')
 
 def iterable2str(seq, sep): 
     it = iter(seq)
@@ -49,7 +49,6 @@ class Scene:
 			self.curr_scene.setPosition([0,params.sphereHeight,params.sphereDistance])
 			self.curr_scene.color(viz.BLUE)
 		if id == 101: #'room':
-			#viz.add('piazza.osgb')
 			self.curr_scene = viz.add('gallery.osgb')
 			self.curr_scene.setPosition([0,0,params.roomPosOffset])
 		'''
@@ -115,7 +114,6 @@ class Scene:
 		'''
 			
 	def setupFixation(self):
-		#self.fixation = viz.addText3D('+',pos=[0,2,params.sphereDistance])
 		self.fixation = viz.addText('+',viz.SCREEN) 
 		self.fixation.setPosition([0.5,0.5,0])
 		self.fixation.alignment(viz.ALIGN_CENTER_CENTER)
@@ -139,10 +137,8 @@ class Instruction:
 		self.textChoice.alignment(viz.ALIGN_CENTER_CENTER)
 		self.textChoice.setPosition([0.5,0.5,0])
 	def playStartSound(self):
-		#startSound = viz.addAudio('notify.wav')
 		params.startSound.play()
 	def playEndSound(self):
-		#endSound = viz.addAudio('chimes.wav')
 		params.endSound.play()
 	def updateTrials(self):
 		global lastTrials
@@ -222,8 +218,6 @@ class ActiveTrial:
 			
 			scene.setupFixation()
 			thisIns.playStartSound()
-			#if self.scene == 0:
-				#scene.closeFixation()
 			
 			yield viztask.waitTime(params.nSecPerTrial)
 			scene.closeScene()
