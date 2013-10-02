@@ -43,9 +43,9 @@ class Executive:
 		self.trialSequence = [seq[i] for i in order]
 		
 		for each in self.trialSequence:
-			self.jitter.append(params.all_amp[each[0]]) 
-			self.scene.append(params.all_scene[each[0]])
-			self.dim.append(params.all_dim[each[0]]) 			
+			self.jitter.append(params.all_amp[int(each[0])]) 
+			self.scene.append(params.all_scene[int(each[1])])
+			self.dim.append(params.all_dim[int(each[2])]) 			
 	
 	def startSession(self):
 		self.generateTrials()
@@ -55,7 +55,7 @@ class Executive:
 		yield self.doTrials()
 		
 	def saveResponseData(self,subjectName):
-		result = open(str(subjectName)+'_mode'+ str(params.displayMode) + '.txt', 'a') 
+		result = open('./data/'+str(subjectName)+'_mode_'+ str(params.displayMode) + '.txt', 'a') 
 		
 		for each in self.scene:
 			result.write(str(each) + ' ')
@@ -65,7 +65,7 @@ class Executive:
 			result.write(str(each) + ' ')
 		result.write('\n')
 		
-		for each in self.trialSequence:
+		for each in self.jitter:
 			result.write(str(each) + ' ')
 		result.write('\n')
 		
@@ -98,7 +98,7 @@ class Executive:
 				yield trial.doTrial(self.response)
 				trial.writeToFile(params.subjectName)
 			
-			removeGaussionFuzzy(effect)
+			self.removeGaussionFuzzy(effect)
 			#print 'response = ',self.response # for debug
 			print 'all trials finished'
 						

@@ -25,8 +25,7 @@ class Params:
 	
 	# offsets
 	viewOffset                  = [0.05, -0.2, 0.085]
-	trackerSpaceOffset          = [-0.19,0.11,-0.83] # for gallery
-	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
+	trackerSpaceOffset          = [0,0,0]
 	trackerSpaceRot             = [0,0,0] # for rural pit: startOri = [5,0,0]
 	startZ						= 0
 	eyeHeight					= 1.7
@@ -34,12 +33,12 @@ class Params:
 	# distance settings
 	treadmillPosZ = 0.6 # need to measure every time
 	
-	sphereScale = 0.3
-	sphereHeight = 2 # the sphere does not lay on the floor; it floats at a constant position
-	sphereDistance = 10 + treadmillPosZ # the distance between the observer and sphere
+	#sphereScale = 0.3
+	#sphereHeight = 2 # the sphere does not lay on the floor; it floats at a constant position
+	#sphereDistance = 10 + treadmillPosZ # the distance between the observer and sphere
 	
-	ROOM_DISTANCE = 9.87 # from the center of the room to the end
-	roomPosOffset = sphereDistance - ROOM_DISTANCE
+	#ROOM_DISTANCE = 9.87 # from the center of the room to the end
+	#roomPosOffset = sphereDistance - ROOM_DISTANCE
 	BlurRadius = 10
 	
 	# walking speed

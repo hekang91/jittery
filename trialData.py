@@ -33,13 +33,13 @@ class Scene:
 		self.curr_scene_scale = None
 		
 	def setupScene(self,id):
-		if id == 1: #'blue circle'
+		if id == 0: #'blue circle'
 			self.curr_scene_scale = [3, 3, 1]
 			self.curr_scene = viz.addTexQuad()
 			self.curr_scene.color(viz.BLACK)
 			self.curr_scene.setPosition( [0, 3,20] )
 			self.curr_scene.zoffset(1) #avoid zfighing, make curr_scene appear behind pictures
-			self.curr_scene.setScale(curr_scene_scale)
+			self.curr_scene.setScale(self.curr_scene_scale)
 			self.curr_scene.texture(mask)
 
 		if id == 100: #'sphere':
@@ -120,7 +120,7 @@ class Scene:
 		self.fixation.setScale([0.5,0.5,0.5])
 		
 	def closeScene(self):
-		self.curr_scene.visible(False)
+		self.curr_scene.visible(viz.OFF)
 		self.curr_scene.remove()
 		
 	def closeFixation(self):
@@ -164,7 +164,7 @@ def judgeTask(response):
 		thisResp = -1 
 		#Wait for either 'y' or 'n' key to be pressed
 		d = yield viztask.waitKeyDown( ['65361','65363'] ) # left and right
-		if d.key = '65361':
+		if d.key == '65361':
 			thisResp = 1 # left, jitter, yes
 		else:
 			thisResp = 0 # right, no jitter, no
@@ -185,9 +185,9 @@ class ActiveTrial:
 		isDoneWithTrial = False
 		thisIns = Instruction()
 		while not isDoneWithTrial:
+			global headLink, headTrackRaw
 			self.startTime = viz.tick()
-			headTrack = hardware.getOptiTrackTracker(self.dim,self.jitter,self.speedZ,self.startTime)
-			global headLink
+			(headTrack,headTrackRaw) = hardware.getOptiTrackTracker(self.dim,self.jitter,self.speedZ,self.startTime)
 			headLink = viz.link(headTrack, viz.MainView)
 
 			def setTrackerOffset():
@@ -208,7 +208,7 @@ class ActiveTrial:
 
 			setTrackerOffset()
 			
-
+			yield viztask.waitTime(1/30)
 			vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 			
 			scene = Scene()
@@ -236,50 +236,46 @@ class ActiveTrial:
 			
 			isDoneWithTrial = True
 	
-	def writeToFile(subjectName):
-		dataDir = './data_head/'
-        if not os.path.isdir(dataDir):
-            os.makedirs(dataDir)    # this does recursive directory creation so we're always good
-        
-		dataFileName = str(subjectName) + '_T_' + str(params.nTrials - lastTrials + 1) + '.txt'
+	def writeToFile(self,subjectName):
+		dataDir = './data/data_head/'
+		if not os.path.isdir(dataDir):
+			os.makedirs(dataDir)    # this does recursive directory creation so we're always good
+		dataFileName = str(subjectName) + '_mode_' + str(params.displayMode) +'_T_' + str(params.nTrials - lastTrials) + '.txt'
 		dataFile = open(dataDir + '/' + dataFileName, "w")
-		
 		# write data
-        for sample in self.sampleList:
-            dataFile.write(str(sample))
-            dataFile.write('\n')
-            
-        # done
-        dataFile.flush()
-        bdataFile.close()
-			
+		for sample in self.sampleList:
+			dataFile.write(str(sample))
+			dataFile.write('\n')
+		# done
+		dataFile.flush()
+		dataFile.close()
+
 	def collectData(self):
 		class Sample:
 			def __init__(self):
-				self.time = 0
+				self.time       = 0
 				self.trackerPos = [0,0,0]
-				self.VRPos = [0,0,0]
+				self.VRPos      = [0,0,0]
 				self.trackerOri = [0,0,0]
-				self.VROri = [0,0,0]
+				self.VROri      = [0,0,0]
 			def __str__(self):
 				temp = [self.time] + self.trackerPos + self.VRPos + self.trackerOri + self.VROri
 				return iterable2str(temp,'\t')
 		while True:
-			s = Sample()
+			s 				= Sample()
 			s.time          = viz.tick()
-			#s.trackerPos    = headTrack.getPosition()
-			s.trackerPos    = trackerLinkableInt.getPosition()
-			s.VRPos    = viz.MainView.getPosition()
-			s.trackerOri    = headTrack.getEuler()
-			s.VROri    = viz.MainView.getEuler()
+			s.trackerPos    = headTrackRaw.getPosition()
+			s.VRPos   	    = viz.MainView.getPosition()
+			s.trackerOri    = headTrackRaw.getEuler()
+			s.VROri         = viz.MainView.getEuler()
 			#print s
 			self.sampleList.append(s)
 			#self.saveHeadData()
 			yield viztask.waitTime(1/60)
 	
 	def remove(self):
-        for item in self.removeList:
-            item.remove()
+		for item in self.removeList:
+			item.remove()
 	
 	'''		
 	def saveHeadData(self):

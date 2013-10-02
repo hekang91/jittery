@@ -19,13 +19,6 @@ def getOptiTrackTracker(dim,jitter,speedZ,startTime):
 	trackerLinkable = viz.addGroup()
 	
 	def transformQuat():
-		#trackerLinkable.setPosition(trackerLinkableInt.getPosition())
-		#newEuler = [
-		#	trackerLinkableInt.getEuler()[0] * -1, 
-		#	trackerLinkableInt.getEuler()[1] * 1, 
-		#	trackerLinkableInt.getEuler()[2] * 1
-		#	]
-		#trackerLinkable.setEuler(newEuler)
 		if params.displayMode == '1':
 			newQuat = [
 				trackerLinkableInt.getQuat()[0] * -1, 
@@ -50,29 +43,24 @@ def getOptiTrackTracker(dim,jitter,speedZ,startTime):
 	
 	
 	def applyJitter():
-		whiteNoise = random.gauss(-0.5,0.5)
+		whiteNoise = random.gauss(0,1)
 		if params.displayMode != '3':
 			newPos = trackerLinkableInt.getPosition()
 			newPos[dim] = newPos[dim] + jitter*whiteNoise
 			newPos[2] = newPos[2] + speedZ*(viz.tick()-startTime)
 		elif params.displayMode == '3':
-			newPos = params.trackerSpaceOffset
-			#print params.trackerSpaceOffset
+			newPos = [0,0,0]
 			newPos[1] = params.eyeHeight
-			newPos[2] = params.startZ + speedZ*(viz.tick()-startTime)
-		
+			newPos[dim] = newPos[dim] + jitter*whiteNoise
+			newPos[2] = 0 + speedZ*(viz.tick()-startTime)
+			
 		trackerLinkable.setPosition(newPos)	
 	
 	vizact.onupdate(viz.PRIORITY_PLUGINS+2,applyJitter)	
 	
-	return trackerLinkable
-
-
-
-def setTrackerOffset():
-	global headTrack, headLink
-		
-		
+	return (trackerLinkable,trackerLinkableInt)
+	
+	
 
 # the monitor and helmet display settings
 def setupGfx():	
@@ -92,7 +80,7 @@ def setupGfx():
 	viz.setOption('viz.prevent_screensaver', 1)
 	viz.setMultiSample(False)
 
-	viz.MainScene.enable(viz.POINT_SMOOTH,viz.NICE)
+	#viz.MainScene.enable(viz.POINT_SMOOTH,viz.NICE)
 	viz.go()
 
 # if executing this, call main
