@@ -4,7 +4,8 @@ import vizact
 import viztask
 import itertools
 import random
-from pyDOE import *
+#from pyDOE import *
+from fullfact import *
 
 import hardware
 import trialData
