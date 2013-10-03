@@ -92,7 +92,7 @@ class Executive:
 			effect = self.setGaussionFuzzy()
 			for whatJitter,whatScene,whatDim in zip(self.jitter,self.scene,self.dim):
 				
-				#print whatJitter,whatScene,whatDim # for debug
+				print whatJitter,whatScene,whatDim # for debug
 				trial = trialData.ActiveTrial(whatScene,whatDim,whatJitter,params.walkSpeedZ)
 				
 				yield trial.doTrial(self.response)

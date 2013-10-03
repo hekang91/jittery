@@ -2,21 +2,20 @@
 import viz
 
 class Params:
-	all_amp = [0.001,0.1] # for debug
-	#all_amp = [0.004,0.008,0.012,0.016,0.020,0.024,0.028,0.032] # walk, 8 level, do not use
-	#all_amp = [0.002,0.007,0.012,0.017,0.022,0.027,0.032]		 # walk, 7 level, use it in the exp
+	all_amp = [0] # for debug
+	#all_amp = [0.005,0.0010,0.015,0.020,0.025,0.030,0.035,0.040,0.045]
 	
 	# the scene we used
 	all_scene = [0]
 	
 	# the direction we apply the jittery on
 	all_dim = [0,1] # 0:x, 1:y, 2:z
-	# face Z postive: 0: left or right, 1: up or down, 2: back or forth
+	# face Z postive: 0: left and right, 1: up and down, 2: back and forth
 		
-	nTrialPerCond = 2 # default = 10
+	nTrialPerCond = 10 # default = 20
 	nTrials = len(all_scene)*len(all_dim)*len(all_amp)*nTrialPerCond # for each jittery condition, do how many trials
 
-	nSecPerTrial = 3 # second, default = 3
+	nSecPerTrial = 2 # sec, default = 2
 	
 	#sound
 	startSound = viz.addAudio('notify.wav')
@@ -24,21 +23,17 @@ class Params:
 	
 	
 	# offsets
-	viewOffset                  = [0.05, -0.2, 0.085]
+	viewOffset                  = [0,0,0] #for HMD [0.05, -0.2, 0.085]
 	trackerSpaceOffset          = [0,0,0]
 	trackerSpaceRot             = [0,0,0] # for rural pit: startOri = [5,0,0]
 	startZ						= 0
 	eyeHeight					= 1.7
 	
 	# distance settings
-	treadmillPosZ = 0.6 # need to measure every time
-	
-	#sphereScale = 0.3
-	#sphereHeight = 2 # the sphere does not lay on the floor; it floats at a constant position
-	#sphereDistance = 10 + treadmillPosZ # the distance between the observer and sphere
-	
-	#ROOM_DISTANCE = 9.87 # from the center of the room to the end
-	#roomPosOffset = sphereDistance - ROOM_DISTANCE
+	#treadmillPosZ = 0.6 # need to measure every time
+
+	circleScale = [0.8, 0.8, 1]
+	circlePos = [0, 1, 12]
 	BlurRadius = 10
 	
 	# walking speed

@@ -34,10 +34,10 @@ class Scene:
 		
 	def setupScene(self,id):
 		if id == 0: #'blue circle'
-			self.curr_scene_scale = [3, 3, 1]
+			self.curr_scene_scale = params.circleScale
 			self.curr_scene = viz.addTexQuad()
 			self.curr_scene.color(viz.BLACK)
-			self.curr_scene.setPosition( [0, 3,20] )
+			self.curr_scene.setPosition(params.circlePos)
 			self.curr_scene.zoffset(1) #avoid zfighing, make curr_scene appear behind pictures
 			self.curr_scene.setScale(self.curr_scene_scale)
 			self.curr_scene.texture(mask)
@@ -216,13 +216,13 @@ class ActiveTrial:
 			
 			collectDataTask = viztask.schedule(self.collectData())
 			
-			scene.setupFixation()
+			#scene.setupFixation()
 			thisIns.playStartSound()
 			
 			yield viztask.waitTime(params.nSecPerTrial)
 			scene.closeScene()
 			collectDataTask.kill()
-			scene.closeFixation()			
+			#scene.closeFixation()			
 			
 			thisIns.playEndSound()
 			thisIns.initChoice()
