@@ -2,8 +2,8 @@
 import viz
 
 class Params:
-	all_amp = [0] # for debug
-	#all_amp = [0.005,0.0010,0.015,0.020,0.025,0.030,0.035,0.040,0.045]
+	all_amp = [0.01] # for debug
+	#all_amp = [0.01,0.018,0.026,0.034,0.042,0.050,0.058]
 	
 	# the scene we used
 	all_scene = [0]
@@ -12,7 +12,7 @@ class Params:
 	all_dim = [0,1] # 0:x, 1:y, 2:z
 	# face Z postive: 0: left and right, 1: up and down, 2: back and forth
 		
-	nTrialPerCond = 10 # default = 20
+	nTrialPerCond = 20 # default = 20
 	nTrials = len(all_scene)*len(all_dim)*len(all_amp)*nTrialPerCond # for each jittery condition, do how many trials
 
 	nSecPerTrial = 2 # sec, default = 2
@@ -32,8 +32,8 @@ class Params:
 	# distance settings
 	#treadmillPosZ = 0.6 # need to measure every time
 
-	circleScale = [0.8, 0.8, 1]
-	circlePos = [0, 1, 12]
+	circleScale = [0.5, 0.5, 0.5]
+	circlePos = [0, 2, 7]
 	BlurRadius = 10
 	
 	# walking speed

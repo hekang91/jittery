@@ -208,7 +208,7 @@ class ActiveTrial:
 
 			setTrackerOffset()
 			
-			yield viztask.waitTime(1/30)
+			yield viztask.waitTime(3/60)
 			vizact.onupdate(viz.PRIORITY_PLUGINS+3, headLink.update)
 			
 			scene = Scene()
