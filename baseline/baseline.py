@@ -8,19 +8,20 @@ import os
 
 class Params:
 	#nSecPerTrial = 5 # for debug
-	nSecPerTrial = 60
+	nSecPerTrial = 60 # default is 60
 
 	viewOffset                  = [0.05, -0.2, 0.085]
 	
 	#trackerSpaceOffset          = [-0.36,0.11,-0.42] # for gallery
 	#trackerSpaceOffset          = [-1.6,0.11,5.8] # for rural pit: startPos = [-1.5,1.63,6.5]
 	trackerSpaceOffset          = [2,0.11,-170] # for city
-	startZ = -170 #trackerSpaceOffset will change during moving; we need a constant variable indicating the start position for applying movement
+	startZ = -340 #trackerSpaceOffset will change during moving; we need a constant variable indicating the start position for applying movement
 	
 	#trackerSpaceRot             = [7.5,0,0] # for rural pit: startOri = [5,0,0]
 	trackerSpaceRot             = [0,0,0] # for city
 	
-	walkSpeed = 1.5
+	walkSpeedRaw = 5.0 # km/h
+	walkSpeed = walkSpeedRaw/3.6 # m/s
 	
 	eyeHeight = 1.7
 	
@@ -32,6 +33,12 @@ class ParamsJitter:
 	dim = 0 #0:x, 1:y, 2:z
 	#face Z postive: 0:lr, 1:ud, 2: bf 
 	amp = 0.00
+
+def MyTask():
+    
+    while True:
+        
+        yield viztask.waitTime(60)
 
 
 
@@ -325,6 +332,7 @@ def main():
 	scene = City()
 	#scene = Grass()
 	viz.MainView.collision( viz.ON )
+	
 	
 	global startTime
 	startTime = viz.tick()
